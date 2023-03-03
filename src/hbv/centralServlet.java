@@ -1,9 +1,3 @@
-package hbv;
-
-
-import java.sql.*;
-import java.util.*;
-
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -114,9 +108,9 @@ public class centralServlet extends HttpServlet {
 			{
 
 				// Connexion a la base de donnees
-				//Class.forName("com.mysql.cj.jdbc.Driver");
-				//Connection con = DatabaseConnection.getConnection();
-        Connection con = DriverManager.getConnection("jdbc:mariadb://mysql-server:3306/jguimfackjeuna_db", "jguimfackjeuna", "gR7cqZhgai0fATxTMAMO"); 
+				
+				Connection con = DatabaseConnection.getConnection();
+
 				// Verification de la disponibilite de l'heure1
 				// Compter le nombre de rendez-vous pour l'heure 1 a la date 1
 				PreparedStatement stmt1 = con
@@ -208,6 +202,7 @@ public class centralServlet extends HttpServlet {
 				if (rowsAffected > 0) {
 					//response.getWriter().println("Ihr Termin ist bestätigt");
 					response.sendRedirect("confirmation.html");
+					DatabaseConnection.releaseConnection(con);
 				} else {
 					response.getWriter().println(
 							"Ihr Termin konnte nicht gespeichert werden. Bitte versuchen Sie es zu einem späteren Zeitpunkt erneut.");

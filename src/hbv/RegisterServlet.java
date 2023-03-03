@@ -1,4 +1,10 @@
-package hbv;
+
+
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -8,24 +14,15 @@ import java.util.Properties;
 import javax.mail.*;
 import javax.mail.internet.*;
 
-import java.sql.*;
-import java.util.*;
-
-
-import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-
-
 @WebServlet("/registerVrai")
 public class RegisterServlet extends HttpServlet {
+
   private static final long serialVersionUID = 1L;
 
-  protected void doPost(HttpServletRequest request, HttpServletResponse response)
-      throws ServletException, IOException {
-
+  protected void doPost(
+    HttpServletRequest request,
+    HttpServletResponse response
+  ) throws ServletException, IOException {
     // Récupération des parametres de la requete
     String username = request.getParameter("username");
     String firstName = request.getParameter("firstName");
@@ -37,39 +34,29 @@ public class RegisterServlet extends HttpServlet {
 
     // Validation des entrees
 
-    if (username != null && username.isEmpty() ) {
+    if (username != null && username.isEmpty()) {
       response.getWriter().println("<h1>Le nom d'utilisateur est vide</h1>");
       return;
+    } else if (firstName != null && firstName.isEmpty()) {
+      response.getWriter().println("<h1>Veuillez entrez votre prenom.</h1>");
+
+      return;
+    } else if (lastName != null && lastName.isEmpty()) {
+      response.getWriter().println("<h1>Veuillez entrez votre nom</h1>");
+
+      return;
+    } else if (password != null && password.isEmpty()) {
+      response.getWriter().println("<h1><Veuillez entrez un mot de passe</h1>");
+
+      return;
+    } else if (email != null && email.isEmpty()) {
+      response.getWriter().println("<h1>Veuillez entrer une adresse mail<h1>");
+
+      return;
     }
-    else if (firstName != null && firstName.isEmpty() ) {
-    	
-    	response.getWriter().println("<h1>Veuillez entrez votre prenom.</h1>");
-    	
-    	return;
-    }
-    else if (lastName != null && lastName.isEmpty() ) {
-    	
-    	response.getWriter().println("<h1>Veuillez entrez votre nom</h1>");
-    	
-    	return;
-    }
-    else if (password != null && password.isEmpty() ) {
-    	
-    	response.getWriter().println("<h1><Veuillez entrez un mot de passe</h1>");
-    	
-    	return;
-    }
-    else if (email != null && email.isEmpty() ) {
-    	
-    	response.getWriter().println("<h1>Veuillez entrer une adresse mail<h1>");
-    	
-    	return;
-    }
-    
 
     // Creation de la connexion a la base de donnees
-    try (  Connection conn = DriverManager.getConnection("jdbc:mariadb://mysql-server:3306/jguimfackjeuna_db", "jguimfackjeuna", "gR7cqZhgai0fATxTMAMO") ){
-
+    try (Connection conn = DatabaseConnection.getConnection()) {
       // Verification si le mom d'utilisateur n'est pas encore pri
       String sql = "SELECT * FROM usersApp WHERE username=?";
 
@@ -85,7 +72,6 @@ public class RegisterServlet extends HttpServlet {
 
       sql = "SELECT * FROM usersApp WHERE email=?";
       try (PreparedStatement statement = conn.prepareStatement(sql)) {
-
         statement.setString(1, email);
         ResultSet rs = statement.executeQuery();
         if (rs.next()) {
@@ -96,9 +82,9 @@ public class RegisterServlet extends HttpServlet {
 
       // Insertion dans la base de Donnees
 
-      sql = "INSERT INTO usersApp (username, first_name, last_name, password, email, city, postal_code) VALUES (?,?,?,?,?,?,?)";
+      sql =
+        "INSERT INTO usersApp (username, first_name, last_name, password, email, city, postal_code) VALUES (?,?,?,?,?,?,?)";
       try (PreparedStatement statement = conn.prepareStatement(sql)) {
-
         statement.setString(1, username);
         statement.setString(2, firstName);
         statement.setString(3, lastName);
@@ -122,57 +108,70 @@ public class RegisterServlet extends HttpServlet {
           properties.put("mail.smtp.starttls.enable", "true");
 
           // Creation d'une session pour l'envoi de l'e-mail
-          Session session = Session.getDefaultInstance(properties, new javax.mail.Authenticator() {
-            protected PasswordAuthentication getPasswordAuthentication() {
-              return new PasswordAuthentication(from, passwordmail);
-            }
-          });
-
-/*Je créé un nouveau thread pour l'envoi de l'e-mail, afin de ne pas bloquer le thread 
- * principal. Cela permet d'améliorer la réactivité de l'application pour l'utilisateur.
- */          
-                 
-          // Création d'un thread pour l'envoi de l'e-mail
-          Thread emailThread = new Thread(new Runnable() {
-            @Override
-            public void run() 
-            {
-              try {
-                // Creation d'un objet MimeMessage
-                MimeMessage message = new MimeMessage(session);
-
-                // Definition des details de l'e-mail
-                message.setFrom(new InternetAddress(from));
-                message.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
-                message.setSubject("Einrichtung des Kontos für die Buchung von Terminen für die Covid-19-Impfung.");
-                message.setText("Hallo Frau/Herr" + lastName + "," + "Ihr Konto wurde erfolgreich erstellt. Klicken Sie "
-                        + "auf den folgenden Link um Ihnen enloggen zu können: " + " http://localhost:8084/App/login.html");
-
-                // Envoi de l'e-mail
-                Transport.send(message);
-              } catch (MessagingException e) {
-                e.printStackTrace();
+          Session session = Session.getDefaultInstance(
+            properties,
+            new javax.mail.Authenticator() {
+              protected PasswordAuthentication getPasswordAuthentication() {
+                return new PasswordAuthentication(from, passwordmail);
               }
             }
-          });
+          );
+
+          // Création d'un thread pour l'envoi de l'e-mail
+          Thread emailThread = new Thread(
+            new Runnable() {
+              @Override
+              public void run() {
+                try {
+                  // Creation d'un objet MimeMessage
+                  MimeMessage message = new MimeMessage(session);
+
+                  // Definition des details de l'e-mail
+                  message.setFrom(new InternetAddress(from));
+                  message.addRecipient(
+                    Message.RecipientType.TO,
+                    new InternetAddress(to)
+                  );
+                  message.setSubject(
+                    "Einrichtung des Kontos für die Buchung von Terminen für die Covid-19-Impfung."
+                  );
+                  message.setText(
+                    "Hallo Frau/Herr" +
+                    lastName +
+                    "," +
+                    "Ihr Konto wurde erfolgreich erstellt. Klicken Sie " +
+                    "auf den folgenden Link um Ihnen enloggen zu können: " +
+                    " http://localhost:8084/App/login.html"
+                  );
+
+                  // Envoi de l'e-mail
+                  Transport.send(message);
+                } catch (MessagingException e) {
+                  e.printStackTrace();
+                }
+              }
+            }
+          );
           emailThread.start();
 
-          response.getWriter().println(
-                  "Ihr Konto wurde erfolgreich erstellt. Eine Bestätigungs-E-Mail wird an Ihre E-Mail-Adresse gesendet.");
-
+          response
+            .getWriter()
+            .println(
+              "Ihr Konto wurde erfolgreich erstellt. Eine Bestätigungs-E-Mail wird an Ihre E-Mail-Adresse gesendet."
+            );
+              // Libération de la connexion
+              
+          DatabaseConnection.releaseConnection(conn);
+            
+       
         } else {
           response.sendRedirect("register.html?error=InsertionError");
         }
-
       }
     } catch (SQLException e) {
-
       System.out.println("Fehler");
 
       e.printStackTrace();
-    }
-    
-    }
-    }
-
- 
+    } 
+  }
+}

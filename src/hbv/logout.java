@@ -17,7 +17,7 @@ public class logout extends HttpServlet {
 		HttpSession session = request.getSession();
 		session.invalidate(); // Supprime toutes les variables de session
 
-		response.sendRedirect("login.html"); // Redirige vers la page de connexion
+		response.sendRedirect("index.html"); // Redirige vers la page de connexion
 	}
 
 }
