@@ -1,16 +1,18 @@
-
+package hbv;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Properties;
+
 import javax.mail.*;
 import javax.mail.internet.*;
 
@@ -18,11 +20,17 @@ import javax.mail.internet.*;
 public class RegisterServlet extends HttpServlet {
 
   private static final long serialVersionUID = 1L;
+  
+ 
 
   protected void doPost(
     HttpServletRequest request,
     HttpServletResponse response
   ) throws ServletException, IOException {
+
+   response.setContentType("text/html");
+
+
     // Récupération des parametres de la requete
     String username = request.getParameter("username");
     String firstName = request.getParameter("firstName");
@@ -35,22 +43,22 @@ public class RegisterServlet extends HttpServlet {
     // Validation des entrees
 
     if (username != null && username.isEmpty()) {
-      response.getWriter().println("<h1>Le nom d'utilisateur est vide</h1>");
+      response.getWriter().println("<h1>Bitte geben Sie einen Benutzernamen ein.</h1>");
       return;
     } else if (firstName != null && firstName.isEmpty()) {
-      response.getWriter().println("<h1>Veuillez entrez votre prenom.</h1>");
+      response.getWriter().println("<h1>Bitte geben Sie Ihren Vornamen ein.</h1>");
 
       return;
     } else if (lastName != null && lastName.isEmpty()) {
-      response.getWriter().println("<h1>Veuillez entrez votre nom</h1>");
+      response.getWriter().println("<h1>Bitte geben Sie Ihren Name ein.</h1>");
 
       return;
     } else if (password != null && password.isEmpty()) {
-      response.getWriter().println("<h1><Veuillez entrez un mot de passe</h1>");
+      response.getWriter().println("<h1>Bitte geben Sie ein Password ein.</h1>");
 
       return;
     } else if (email != null && email.isEmpty()) {
-      response.getWriter().println("<h1>Veuillez entrer une adresse mail<h1>");
+      response.getWriter().println("<h1>Bitte geben Sie eine gültige E-Mail-Adresse ein.<h1>");
 
       return;
     }
@@ -98,9 +106,9 @@ public class RegisterServlet extends HttpServlet {
         // Verification si l'insertion a reussi
         if (ex > 0) {
           String to = email; // adresse e-mail du destinataire
-          String from = "coronaappljma@gmail.com"; // adresse e-mail de l'exp�diteur
-          String passwordmail = "fenjfqbjsxgthyha"; // mot de passe de l'expediteur
-          // Configuration des proprietes pour se connecter au serveur SMTP de Gmail
+         String from = "coronaapp65@gmail.com"; // adresse e-mail de l'exp�diteur
+         String passwordmail = "ywdjntzxyllwoclk"; 
+// Configuration des proprietes pour se connecter au serveur SMTP de Gmail
           Properties properties = new Properties();
           properties.put("mail.smtp.host", "smtp.gmail.com");
           properties.put("mail.smtp.auth", "true");
@@ -141,7 +149,7 @@ public class RegisterServlet extends HttpServlet {
                     "," +
                     "Ihr Konto wurde erfolgreich erstellt. Klicken Sie " +
                     "auf den folgenden Link um Ihnen enloggen zu können: " +
-                    " http://localhost:8084/App/login.html"
+                    "https://informatik.hs-bremerhaven.de/docker-swe3-2022team08-java/"
                   );
 
                   // Envoi de l'e-mail

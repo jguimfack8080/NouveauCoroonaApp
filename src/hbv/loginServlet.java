@@ -1,15 +1,14 @@
-import java.sql.*;
-import java.util.*;
+package hbv;
 
+import java.io.*;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+
 import jakarta.servlet.ServletException;
-
 import jakarta.servlet.annotation.WebServlet;
-
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -18,19 +17,24 @@ import jakarta.servlet.http.HttpSession;
 @WebServlet("/loginVrai")
 public class loginServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
-
+  
+   
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+
+       response.setContentType("text/html");
+
         // Recuperation des parametres de la requête
         String username = request.getParameter("username");
         String password = request.getParameter("password");
 
         if (username != null && username.isEmpty() && password != null && password.isEmpty()) {
-            response.sendRedirect("login.html?error=missingFields");
+            PrintWriter out = response.getWriter();
+            out.println("<script>alert('fehlende Angaben');" +" window.location.href='login.html?error=fehlendeAngaben'</script>");
             return;
         }
 
-        // Création de la connexion à la base de données
+        
         try (Connection conn = DatabaseConnection.getConnection()) {
             // Création de la session utilisateur
             HttpSession session = request.getSession();
@@ -41,7 +45,7 @@ public class loginServlet extends HttpServlet {
                 @Override
                 public void run() {
                     // Vérification des informations de connexion
-                    String sql = "SELECT * FROM usersApp WHERE username=? AND password=?";
+                    String sql = "SELECT * FROM usersApp WHERE BINARY  username=? AND password=?";
 
                     try (PreparedStatement statement = conn.prepareStatement(sql)) {
                         statement.setString(1, username);
@@ -72,10 +76,9 @@ public class loginServlet extends HttpServlet {
                 }
             });
 
-            // Démarrage du thread pour la vérification des informations de connexion
+           
             verifyLoginThread.start();
 
-            // Attente du thread pour la vérification des informations de connexion
             try {
                 verifyLoginThread.join();
             } catch (InterruptedException e) {

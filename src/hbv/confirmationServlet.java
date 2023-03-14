@@ -2,11 +2,8 @@ package hbv;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-//import java.io.OutputStream;
-//import java.nio.file.Files;
 import java.time.LocalDate;
 import java.time.LocalTime;
-//import java.util.Collections;
 import java.util.Properties;
 
 import javax.mail.Authenticator;
@@ -19,6 +16,8 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
+
+
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -46,6 +45,8 @@ public class confirmationServlet extends HttpServlet {
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         // Verification de l'existence de la session
+        
+        response.setContentType("text/html");
 
         HttpSession session = request.getSession(false);
         if (session == null) {
@@ -78,7 +79,7 @@ public class confirmationServlet extends HttpServlet {
             Font titleFont = new Font(FontFamily.HELVETICA, 16, Font.BOLD);
 
             // Ajout du titre principal
-            Paragraph title = new Paragraph("Terminbest�tigung f�r " + firstName + " " +lastName, titleFont);
+            Paragraph title = new Paragraph("Terminbestätigung für " + firstName + " " +lastName, titleFont);
             title.setAlignment(Element.ALIGN_CENTER);
             title.setSpacingAfter(20);
             document.add(title);
@@ -100,7 +101,7 @@ public class confirmationServlet extends HttpServlet {
             document.add(new Paragraph("Impfstoff: " + vaccine));
 
             // Ajout d'un message de confirmation
-            Paragraph confirmation = new Paragraph("Vielen Dank f�r Ihre Terminbuchung. Bitte bringen Sie Ihren Personalausweis  mit.");
+            Paragraph confirmation = new Paragraph("Vielen Dank für Ihre Terminbuchung. Bitte bringen Sie Ihren Personalausweis  mit.");
             confirmation.setAlignment(Element.ALIGN_CENTER);
             confirmation.setSpacingBefore(20);
             document.add(confirmation);
@@ -120,8 +121,8 @@ public class confirmationServlet extends HttpServlet {
 				
 				 // Envoi du document PDF au client par email
 		        String to = email; // client's email address
-		        String from = "coronaappljma@gmail.com"; // l'adresse email pour l'envoie
-		        String password = "fenjfqbjsxgthyha"; // Mot de passe de l'adresse mail
+		        String from = "coronaapp65@gmail.com"; // l'adresse email pour l'envoie
+		        String password = "ywdjntzxyllwoclk"; // Mot de passe de l'adresse mail
 		        String host = "smtp.gmail.com"; // your email provider's SMTP server
 		        Properties props = new Properties();
 		        props.put("mail.smtp.host", host);
@@ -150,7 +151,7 @@ public class confirmationServlet extends HttpServlet {
 
 		            // Cr�er le corps de la pi�ce jointe
 		            MimeBodyPart attachmentBodyPart = new MimeBodyPart();
-		            attachmentBodyPart.setFileName(username + "Reservation.pdf");
+		            attachmentBodyPart.setFileName(username + "Buchung.pdf");
 		            attachmentBodyPart.setDataHandler(new javax.activation.DataHandler(new javax.mail.util.ByteArrayDataSource(baos.toByteArray(), "application/pdf")));
 
 		            // Cr�ez le message multipart et ajoutez-y les parties du corps.

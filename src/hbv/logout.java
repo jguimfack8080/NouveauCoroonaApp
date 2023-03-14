@@ -11,11 +11,16 @@ import jakarta.servlet.http.HttpSession;
 @WebServlet("/logout")
 public class logout extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-
+  
+  
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		HttpSession session = request.getSession();
-		session.invalidate(); // Supprime toutes les variables de session
+
+     response.setContentType("text/html");
+
+     HttpSession session = request.getSession();
+		
+     session.invalidate(); // Supprime toutes les variables de session
 
 		response.sendRedirect("index.html"); // Redirige vers la page de connexion
 	}

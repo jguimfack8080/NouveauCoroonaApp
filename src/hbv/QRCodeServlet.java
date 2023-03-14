@@ -19,11 +19,13 @@ import com.google.zxing.common.BitMatrix;
 @WebServlet("/qrcode")
 public class QRCodeServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
-
-    @Override
+    
+ 
+     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     	
-    	
+     response.setContentType("text/html");
+   	
     	// Obtention des attributs de session
     	HttpSession session = request.getSession();
     	String username = (String) session.getAttribute("username");
