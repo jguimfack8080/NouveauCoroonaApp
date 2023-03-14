@@ -1,3 +1,5 @@
+package hbv;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -7,9 +9,9 @@ import java.util.concurrent.TimeUnit;
 
 public class DatabaseConnection {
 
-    private static final String DB_URL = "jdbc:mariadb://mysql-server:3306/jguimfackjeuna_db";
-    private static final String USER = "jguimfackjeuna";
-    private static final String PASSWORD = "gR7cqZhgai0fATxTMAMO";
+    private static final String DB_URL = "jdbc:mariadb://mysql-server:3306/swe3-2022team08_db";
+    private static final String USER = "swe3-2022team08";
+    private static final String PASSWORD = "OesRQnYew8jAneTSKnUC";
 
     // Paramètres du pool de connexions
     private static final int INITIAL_POOL_SIZE = 5;

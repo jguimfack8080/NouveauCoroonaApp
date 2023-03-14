@@ -1,3 +1,6 @@
+package hbv;
+
+import java.io.*;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -12,6 +15,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
+
 @WebServlet("/centralVrai")
 
 public class centralServlet extends HttpServlet {
@@ -23,12 +27,13 @@ public class centralServlet extends HttpServlet {
 
 	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-		
+		response.setContentType("text/html");
+
 		HttpSession session = request.getSession(false);
 		
 		if (session == null) {
 			// Si la session n'existe pas, redirection vers la page de connexion
-			response.sendRedirect("login.html");
+      response.sendRedirect("login.html");
 			return;
 		}
 		// Recuperation des variables de sessions depuis la page login.html
