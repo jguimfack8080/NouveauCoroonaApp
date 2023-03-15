@@ -13,7 +13,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 
-@WebServlet("/termin")
+
 public class TerminAnsehenServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
@@ -114,6 +114,7 @@ public class TerminAnsehenServlet extends HttpServlet {
 			out.println("</html>");
 
 			DatabaseConnection.releaseConnection(con);
+      //response.sendRedirect("centralVrai");
 
 		} catch (Exception e) {
 			response.getWriter().println("Erreur : " + e.getMessage());

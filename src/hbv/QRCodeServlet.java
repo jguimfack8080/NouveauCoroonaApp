@@ -16,7 +16,7 @@ import com.google.zxing.WriterException;
 import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
 
-@WebServlet("/qrcode")
+
 public class QRCodeServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
     

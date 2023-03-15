@@ -16,7 +16,7 @@ import java.util.Properties;
 import javax.mail.*;
 import javax.mail.internet.*;
 
-@WebServlet("/registerVrai")
+
 public class RegisterServlet extends HttpServlet {
 
   private static final long serialVersionUID = 1L;

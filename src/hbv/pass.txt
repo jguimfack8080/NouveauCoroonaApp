@@ -1,3 +1,0 @@
-  String from = "coronaapp65@gmail.com"; // adresse e-mail de l'exp�diteur
-  String passwordmail = "fenjfqbjsxgthyha"; 
-ywdjntzxyllwoclk

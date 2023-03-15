@@ -6,8 +6,7 @@ sed -i \
   -e "s/yourdatabase/$YOURDB/g" \
   -e "s/yourusername/$YOURUSER/g" \
   -e "s/yourpassword/$YOURPWD/g" \
-  app/META-INF/context.xml
- # src/hbv/RedisServlet.java src/hbv/MyContextListener.java
+  app/META-INF/context.xml src/hbv/swe3/RedisServlet.java src/hbv/swe3/MyContextListener.java
 
 echo "docker-$USER-java" > webapp.txt
 echo "docker-$USER-manager" > manager.txt

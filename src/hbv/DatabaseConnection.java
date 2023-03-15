@@ -16,7 +16,7 @@ public class DatabaseConnection {
     // Paramètres du pool de connexions
     private static final int INITIAL_POOL_SIZE = 5;
     private static final int MAX_POOL_SIZE = 100;
-    private static final int MAX_WAIT_TIME_SECONDS = 10;
+    private static final int MAX_WAIT_TIME_SECONDS = 15;
 
     private static final BlockingQueue<Connection> connectionPool = new ArrayBlockingQueue<>(MAX_POOL_SIZE);
 
